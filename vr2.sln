@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Google.XR.Cardboard", "Google.XR.Cardboard.csproj", "{65204128-2704-F8A0-FADC-C7A160DA8193}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{39015352-61DD-428D-5818-9F484B43975D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{4E29B970-9009-F98B-5564-25007B5656BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Google.XR.Cardboard.Editor", "Google.XR.Cardboard.Editor.csproj", "{B1751A77-D36B-2EFC-33CA-15306C52D6DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65204128-2704-F8A0-FADC-C7A160DA8193}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65204128-2704-F8A0-FADC-C7A160DA8193}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65204128-2704-F8A0-FADC-C7A160DA8193}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65204128-2704-F8A0-FADC-C7A160DA8193}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39015352-61DD-428D-5818-9F484B43975D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39015352-61DD-428D-5818-9F484B43975D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39015352-61DD-428D-5818-9F484B43975D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39015352-61DD-428D-5818-9F484B43975D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E29B970-9009-F98B-5564-25007B5656BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E29B970-9009-F98B-5564-25007B5656BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E29B970-9009-F98B-5564-25007B5656BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E29B970-9009-F98B-5564-25007B5656BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1751A77-D36B-2EFC-33CA-15306C52D6DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1751A77-D36B-2EFC-33CA-15306C52D6DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1751A77-D36B-2EFC-33CA-15306C52D6DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1751A77-D36B-2EFC-33CA-15306C52D6DE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B430B033-D798-4A0D-908A-EE7D3F6FE7D9}
+	EndGlobalSection
+EndGlobal
