@@ -45,6 +45,7 @@ public class CameraPointer : MonoBehaviour
     public float sensitivity = 10f;
     public float maxYAngle = 80f;
     private Vector2 currentRotation;
+    private bool onFloor = true;
 
     private const float _maxDistance2 = 1000;
    // private TextMeshProUGUI Txt;
@@ -55,6 +56,9 @@ public class CameraPointer : MonoBehaviour
         // Txt = GameObject.Find("HUD_Text").GetComponent<TextMeshProUGUI>();
         //GazeRing = GameObject.Find("GazeRing").GetComponent<SpriteRenderer>();
         // GazeRing.sortingOrder = 150;
+
+
+        
         GazeRingTimer.enabled = false;
         audioSource = GameObject.Find("sound_2").GetComponent<AudioSource>();
     }
@@ -79,7 +83,7 @@ public class CameraPointer : MonoBehaviour
     /// </summary>
     public void Update()
     {
-
+      
 
         if (Input.GetMouseButton(0))
         {
@@ -108,7 +112,8 @@ public class CameraPointer : MonoBehaviour
         */
         RaycastHit hitfloor;
         int layerMaskFloor = 1 << 7;
-
+        
+        // Casts ray towards camera's down direction, to detect fllor and calculate height
         if (Physics.Raycast(transform.position, Vector3.down, out hitfloor, _maxDistance2, layerMaskFloor))
         {
             Vector3 pos = hitfloor.point; //get the position where the ray hit the ground
@@ -119,18 +124,23 @@ public class CameraPointer : MonoBehaviour
             Vector3 upDist = upRay.GetPoint(1.6f);
             //smoothly interpolate its position
             transform.position = Vector3.Lerp(transform.position, upDist, 0.5f);
+            onFloor = true;
         }
-        // else
-        //    Txt.text = "--->";
-        // Casts ray towards camera's forward direction, to detect if a GameObject is being gazed
-        // at.
+        else
+            onFloor = false;
+
+
+
+        // Casts ray towards camera's forward direction, to detect if a GameObject is being gazed at
         RaycastHit hit;
         int layerMaskObjects = 1 << 6;
         if (Physics.Raycast(transform.position, transform.forward, out hit, _maxDistance, layerMaskObjects))
         {
+            Debug.Log("---->hit");
             // GameObject detected in front of the camera.
             if (_gazedAtObject != hit.transform.gameObject)
             {
+
                 // New GameObject.
                 if (isObjectController(_gazedAtObject))
                 {
@@ -169,7 +179,7 @@ public class CameraPointer : MonoBehaviour
         }
         */
         if (fire_start_time != 0)
-            if (Time.time - fire_start_time > 2)
+            if (Time.time - fire_start_time > 1)
             {
                 _gazedAtObject?.SendMessage("OnPointerClick");
                 fire_start_time = 0;
@@ -177,22 +187,28 @@ public class CameraPointer : MonoBehaviour
             }
         if (GazeRingTimer.enabled)
         {
+            //Rotate gaze
             GazeRingTimer.transform.Rotate(Vector3.forward, Time.deltaTime*400);
             audioSource.Stop();
         }
         else
         {
-            //float angleY = currentRotation.y;
-            float angle = transform.rotation.eulerAngles.x;
-            // Txt.text = "---> "+ angle;
-            //Debug.Log(Txt.text);
-            if ((angle > 10) && (angle < 35))
+            if (onFloor == true)
             {
-                Vector3 dir = (transform.forward / (2 * angle)) * Time.deltaTime * 100;
-                dir.y = 0;
-                transform.position += dir;
-                if (!audioSource.isPlaying)
-                    audioSource.Play();
+                //move forward
+                float angle = transform.rotation.eulerAngles.x;
+                // Txt.text = "---> "+ angle;
+                //Debug.Log(Txt.text);
+                if ((angle > 10) && (angle < 35))
+                {
+                    Vector3 dir = (transform.forward / (2 * angle)) * Time.deltaTime * 100;
+                    dir.y = 0;
+                    transform.position += dir;
+                    if (!audioSource.isPlaying)
+                        audioSource.Play();
+                }
+                else
+                    audioSource.Stop();
             }
             else
                 audioSource.Stop();
