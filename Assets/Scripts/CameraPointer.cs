@@ -2,7 +2,8 @@
 // - lerp gaze in - out
 // - centraliser la log
 // - mode sans VR
-// - refaire le son des pas
+// - repositionner les tresors pa rappor au sol
+
 
 
 //-----------------------------------------------------------------------
@@ -61,6 +62,7 @@ public class CameraPointer : MonoBehaviour
         
         GazeRingTimer.enabled = false;
         audioSource = GameObject.Find("sound_2").GetComponent<AudioSource>();
+       
     }
 
     private bool isObjectController(GameObject go)
@@ -189,7 +191,8 @@ public class CameraPointer : MonoBehaviour
         {
             //Rotate gaze
             GazeRingTimer.transform.Rotate(Vector3.forward, Time.deltaTime*400);
-            audioSource.Stop();
+            //audioSource.Stop();
+            audioSource.loop = false;
         }
         else
         {
@@ -199,19 +202,30 @@ public class CameraPointer : MonoBehaviour
                 float angle = transform.rotation.eulerAngles.x;
                 // Txt.text = "---> "+ angle;
                 //Debug.Log(Txt.text);
-                if ((angle > 10) && (angle < 35))
+                if ((angle > 8) && (angle < 35))
                 {
+                    /*
                     Vector3 dir = (transform.forward / (2 * angle)) * Time.deltaTime * 100;
+                    audioSource.pitch = 20 / angle;
+                    */
+                    Vector3 dir = (transform.forward * angle / 800) * Time.deltaTime * 100;
+                    audioSource.pitch = 0.8f + (angle / 40);
+
                     dir.y = 0;
                     transform.position += dir;
                     if (!audioSource.isPlaying)
+                    {
+                        audioSource.loop = true;
                         audioSource.Play();
+                    }
                 }
                 else
-                    audioSource.Stop();
+                    //audioSource.Stop();
+                    audioSource.loop = false;
             }
             else
-                audioSource.Stop();
+                //audioSource.Stop();
+                audioSource.loop = false;
         }
      
 
