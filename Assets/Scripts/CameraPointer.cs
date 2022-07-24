@@ -1,8 +1,7 @@
-//rete a faire
-// - lerp gaze in - out
+//reste a faire
 // - centraliser la log
 // - mode sans VR
-// - repositionner les tresors pa rappor au sol
+// - repositionner les tresors par rapport au sol
 
 
 
@@ -41,6 +40,10 @@ public class CameraPointer : MonoBehaviour
     private TextMeshProUGUI Txt;
     public SpriteRenderer GazeRing;
     public SpriteRenderer GazeRingTimer;
+    private bool bGrowing=false;
+    private float GrowingTime = 0;
+    private bool bShrinking = false;
+    private float ShrinkingTime = 0;
 
 
     public float sensitivity = 10f;
@@ -85,8 +88,9 @@ public class CameraPointer : MonoBehaviour
     /// </summary>
     public void Update()
     {
-      
 
+        //------------------------------------------------------------------------------------------------------
+        // Rotate camera with mouse in unity editor
         if (Input.GetMouseButton(0))
         {
 
@@ -96,26 +100,27 @@ public class CameraPointer : MonoBehaviour
             currentRotation.y = Mathf.Clamp(currentRotation.y, -maxYAngle, maxYAngle);
             transform.rotation = Quaternion.Euler(currentRotation.y, currentRotation.x, 0);
         }
-/*
-        //float angleY = currentRotation.y;
-        float angle = transform.rotation.eulerAngles.x;
-        // Txt.text = "---> "+ angle;
-        //Debug.Log(Txt.text);
-        if ((angle > 10) && (angle < 35))
-        {
-            Vector3 dir = (transform.forward / (2 * angle)) * Time.deltaTime * 100;
-            dir.y = 0;
-            transform.position += dir;
-            if (!audioSource.isPlaying)
-                audioSource.Play();
-        }
-        else
-            audioSource.Stop();
-        */
+        /*
+                //float angleY = currentRotation.y;
+                float angle = transform.rotation.eulerAngles.x;
+                // Txt.text = "---> "+ angle;
+                //Debug.Log(Txt.text);
+                if ((angle > 10) && (angle < 35))
+                {
+                    Vector3 dir = (transform.forward / (2 * angle)) * Time.deltaTime * 100;
+                    dir.y = 0;
+                    transform.position += dir;
+                    if (!audioSource.isPlaying)
+                        audioSource.Play();
+                }
+                else
+                    audioSource.Stop();
+                */
+
+        //------------------------------------------------------------------------------------------------------
+        // Casts ray towards camera's down direction, to detect fllor and calculate height
         RaycastHit hitfloor;
         int layerMaskFloor = 1 << 7;
-        
-        // Casts ray towards camera's down direction, to detect fllor and calculate height
         if (Physics.Raycast(transform.position, Vector3.down, out hitfloor, _maxDistance2, layerMaskFloor))
         {
             Vector3 pos = hitfloor.point; //get the position where the ray hit the ground
@@ -132,14 +137,14 @@ public class CameraPointer : MonoBehaviour
             onFloor = false;
 
 
-
+        //------------------------------------------------------------------------------------------------------
         // Casts ray towards camera's forward direction, to detect if a GameObject is being gazed at
         RaycastHit hit;
         int layerMaskObjects = 1 << 6;
         if (Physics.Raycast(transform.position, transform.forward, out hit, _maxDistance, layerMaskObjects))
         {
             Debug.Log("---->hit");
-            // GameObject detected in front of the camera.
+            // New GameObject detected in front of the camera.
             if (_gazedAtObject != hit.transform.gameObject)
             {
 
@@ -155,23 +160,36 @@ public class CameraPointer : MonoBehaviour
                 if (isObjectController(_gazedAtObject))
                 {
                     _gazedAtObject.SendMessage("OnPointerEnter");
+                    bGrowing = true;
+                    GrowingTime = 0;
+                    /*
                     fire_start_time = Time.time;
                     //Txt.text = "hit object";
                     GazeRing.size= new Vector2(3f, 3f);
                     GazeRingTimer.size = new Vector2(3f, 3f);
                     GazeRingTimer.enabled= true;
                     GazeRing.enabled = false;
+                    */
                 }
             }
         }
         else
         {
             // No GameObject detected in front of the camera.
+            if (_gazedAtObject != null)
+            {
+                bShrinking = true;
+                ShrinkingTime = 0;
+            }
             _gazedAtObject?.SendMessage("OnPointerExit");
             _gazedAtObject = null;
             GazeRing.size = new Vector2(1f, 1f);
             GazeRingTimer.enabled = false;
             GazeRing.enabled = true;
+            bGrowing = false;
+            fire_start_time = 0;
+
+
         }
         /*
         // Checks for screen touches.
@@ -180,8 +198,38 @@ public class CameraPointer : MonoBehaviour
             _gazedAtObject?.SendMessage("OnPointerClick");
         }
         */
+
+        if (bGrowing == true)
+        {
+            float durat = 0.3f;
+            GrowingTime += Time.deltaTime;
+            float valueToLerp = Mathf.Lerp(1f, 3f, GrowingTime / durat);
+            GazeRing.size = new Vector2(valueToLerp, valueToLerp);
+            if (GrowingTime> durat)
+            {
+                fire_start_time = Time.time;
+                //Txt.text = "hit object";
+                GazeRing.size = new Vector2(3f, 3f);
+                GazeRingTimer.size = new Vector2(3f, 3f);
+                GazeRingTimer.enabled = true;
+                GazeRing.enabled = false;
+                bGrowing = false;
+            }
+        }
+        if (bShrinking == true)
+        {
+            float durat = 0.2f;
+            ShrinkingTime += Time.deltaTime;
+            float valueToLerp = Mathf.Lerp(3f, 1f, ShrinkingTime / durat);
+            GazeRing.size = new Vector2(valueToLerp, valueToLerp);
+            if (ShrinkingTime > durat)
+            {
+               
+                bShrinking = false;
+            }
+        }
         if (fire_start_time != 0)
-            if (Time.time - fire_start_time > 1)
+            if (Time.time - fire_start_time > 0.8f)
             {
                 _gazedAtObject?.SendMessage("OnPointerClick");
                 fire_start_time = 0;
