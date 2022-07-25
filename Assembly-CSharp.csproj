@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\CameraPointer.cs" />
     <Compile Include="Assets\Scripts\CardboardStartup.cs" />
     <Compile Include="Assets\Samples\Google Cardboard XR Plugin for Unity\1.16.0\Hello Cardboard\Scripts\_VrModeController.cs" />
+    <Compile Include="Assets\Scripts\MyLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Samples\TextMesh Pro\Shaders\TMPro.cginc" />

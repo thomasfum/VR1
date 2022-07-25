@@ -1,7 +1,8 @@
 //reste a faire
-// - centraliser la log
 // - mode sans VR
 // - repositionner les tresors par rapport au sol
+// - animation tresor
+// - compteur tresor
 
 
 
@@ -28,6 +29,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 /// <summary>
 /// Sends messages to gazed GameObject.
 /// </summary>
@@ -37,7 +39,6 @@ public class CameraPointer : MonoBehaviour
     private GameObject _gazedAtObject = null;
     private float fire_start_time=0;
 
-    private TextMeshProUGUI Txt;
     public SpriteRenderer GazeRing;
     public SpriteRenderer GazeRingTimer;
     private bool bGrowing=false;
@@ -52,20 +53,13 @@ public class CameraPointer : MonoBehaviour
     private bool onFloor = true;
 
     private const float _maxDistance2 = 1000;
-   // private TextMeshProUGUI Txt;
+   
     private AudioSource audioSource;
 
     void Start()
     {
-        // Txt = GameObject.Find("HUD_Text").GetComponent<TextMeshProUGUI>();
-        //GazeRing = GameObject.Find("GazeRing").GetComponent<SpriteRenderer>();
-        // GazeRing.sortingOrder = 150;
-
-
-        
         GazeRingTimer.enabled = false;
         audioSource = GameObject.Find("sound_2").GetComponent<AudioSource>();
-       
     }
 
     private bool isObjectController(GameObject go)
@@ -93,7 +87,7 @@ public class CameraPointer : MonoBehaviour
         // Rotate camera with mouse in unity editor
         if (Input.GetMouseButton(0))
         {
-
+            
             currentRotation.x += Input.GetAxis("Mouse X") * sensitivity;
             currentRotation.y -= Input.GetAxis("Mouse Y") * sensitivity;
             currentRotation.x = Mathf.Repeat(currentRotation.x, 360);
@@ -103,8 +97,8 @@ public class CameraPointer : MonoBehaviour
         /*
                 //float angleY = currentRotation.y;
                 float angle = transform.rotation.eulerAngles.x;
-                // Txt.text = "---> "+ angle;
-                //Debug.Log(Txt.text);
+                MyLog.Log("---> "+ angle);
+                //Debug.Log("---> "+ angle);
                 if ((angle > 10) && (angle < 35))
                 {
                     Vector3 dir = (transform.forward / (2 * angle)) * Time.deltaTime * 100;
@@ -164,7 +158,7 @@ public class CameraPointer : MonoBehaviour
                     GrowingTime = 0;
                     /*
                     fire_start_time = Time.time;
-                    //Txt.text = "hit object";
+                    //MyLog.Log("hit object");
                     GazeRing.size= new Vector2(3f, 3f);
                     GazeRingTimer.size = new Vector2(3f, 3f);
                     GazeRingTimer.enabled= true;
@@ -208,7 +202,7 @@ public class CameraPointer : MonoBehaviour
             if (GrowingTime> durat)
             {
                 fire_start_time = Time.time;
-                //Txt.text = "hit object";
+                //MyLog.Log("hit object");
                 GazeRing.size = new Vector2(3f, 3f);
                 GazeRingTimer.size = new Vector2(3f, 3f);
                 GazeRingTimer.enabled = true;
@@ -233,7 +227,7 @@ public class CameraPointer : MonoBehaviour
             {
                 _gazedAtObject?.SendMessage("OnPointerClick");
                 fire_start_time = 0;
-                //Txt.text = "hit object: fire";
+                //MyLog.Log("hit object fire");
             }
         if (GazeRingTimer.enabled)
         {
@@ -248,8 +242,8 @@ public class CameraPointer : MonoBehaviour
             {
                 //move forward
                 float angle = transform.rotation.eulerAngles.x;
-                // Txt.text = "---> "+ angle;
-                //Debug.Log(Txt.text);
+                //MyLog.Log("---> "+ angle);
+                //Debug.Log("---> "+ angle);
                 if ((angle > 8) && (angle < 35))
                 {
                     /*

@@ -55,7 +55,6 @@ public class ObjectController : MonoBehaviour
         _myRenderer = GetComponent<Renderer>();
         SetMaterial(false);
         audioSource = GameObject.Find("sound_1").GetComponent<AudioSource>();
-        //audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     /// <summary>
@@ -106,7 +105,7 @@ public class ObjectController : MonoBehaviour
     /// </summary>
     public void OnPointerClick()
     {
-        audioSource.Play(0);
+        audioSource.Play();
         TeleportRandomly();
     }
 
